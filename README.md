@@ -102,4 +102,5 @@ src/
 ## Notes
 
 - Insulin is stored exactly as you type it. The app will not calculate a dose from carbs.
-- Logs are saved only on the current device. Clearing Expo Go / app data removes them.
+- Favorite insulin amounts are reminders you saved. Prefill is a starting point you can change.
+- Logs and favorites are saved only on the current device. Clearing Expo Go / app data removes them.
