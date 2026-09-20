@@ -15,10 +15,12 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "app.meallog.logger"
+      "bundleIdentifier": "com.chrisrfisher.meallog",
+      "buildNumber": "1"
     },
     "android": {
-      "package": "app.meallog.logger",
+      "package": "com.chrisrfisher.meallog",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundColor": "#E8F4EF"

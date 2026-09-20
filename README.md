@@ -67,12 +67,20 @@ npm run start:tunnel
 npm run typecheck
 ```
 
-## Later: optional store-style builds (not required)
+## Later: optional installable builds (not required)
 
-`eas.json` has a **preview** profile for a future installable build. You do **not** need this (or an Expo login) to use Expo Go.
+You do **not** need EAS, an Expo login, or a Play listing to use Expo Go.
 
-- **Android:** `eas build -p android --profile preview` can produce an APK you can sideload.
-- **iOS:** there is no equivalent “just download an IPA” path. A later installable iOS build needs an Apple Developer account and TestFlight (or a development build).
+`eas.json` profiles:
+
+| Profile | What it is for |
+| --- | --- |
+| `development` | Optional custom dev client later (not Expo Go) |
+| `preview` | Internal **Android APK** you can sideload |
+| `production` | **Android App Bundle (AAB)** for Google Play |
+
+- **Android Play Store:** see [PLAY_STORE.md](./PLAY_STORE.md) for the Console checklist, privacy policy, and `eas build -p android --profile production`.
+- **iOS:** a later installable build needs an Apple Developer account and TestFlight. There is no Play-style APK upload.
 
 ## Project layout
 
