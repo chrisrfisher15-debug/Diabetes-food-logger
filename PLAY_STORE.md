@@ -16,8 +16,12 @@ This repo does **not** include Play Console credentials, a hosted privacy policy
 
 ## Package identity
 
-- Android application id: `com.chrisrfisher.meallog` (`android.package` in `app.json`)
+Play Console **application id** is Expo’s `android.package` in `app.json`:
+
+- Android application id / package: `com.chrisrfisher.meallog`
 - iOS bundle id (for a later App Store/TestFlight build): `com.chrisrfisher.meallog`
+
+Do not change this id after you create the Play app. Google treats it as permanent.
 
 ## Build commands (when you are ready)
 
@@ -62,17 +66,22 @@ If you later add analytics, accounts, or backup, update the Data safety form bef
 ### Store listing
 Prepare these in Play Console (not in this repo):
 
-- **Title** (30 characters): e.g. `Meal Log`
-- **Short description** (80 characters): personal meal and insulin log; not medical advice
-- **Full description**: what v1 logs, local-only storage, and a clear **not a medical device / not dose advice / follow your clinician’s plan** statement
+- **Title** (max 30): `Meal Log`
+- **Short description** (max 80): `Personal meal and insulin log. Not medical advice. Follow your clinician's plan.`
+- **Full description** (draft you can paste, then edit):
+
+  Meal Log is a personal journal for meals and the insulin dose you already took.
+
+  You can record a meal name, foods (optional carbs), the insulin units you entered, optional blood glucose, and a time. Favorite foods remember amounts you saved so you can prefill a log. You can always edit the insulin field before saving.
+
+  This is not a medical device and is not FDA-cleared. It does not calculate or recommend insulin doses. It is not connected to a pump or CGM. Follow your clinician’s plan.
+
+  In this version, logs stay on your phone. There is no account and no cloud backup.
+
 - **App icon**: 512×512
 - **Feature graphic**: 1024×500
-- **Phone screenshots**: at least 2 (home with disclaimer, add-meal form). Tablet shots optional
-- **Privacy policy URL**: required
-
-Suggested listing tone:
-
-> Meal Log is a personal journal for meals and the insulin dose you already took. It does not calculate or recommend insulin. It is not a medical device. Follow your clinician’s plan.
+- **Phone screenshots**: at least 2 (home with the disclaimer visible, add-meal form). Tablet shots optional
+- **Privacy policy URL**: required (you must host this yourself; Play will reject a listing without a working URL)
 
 ## After the AAB is ready
 
