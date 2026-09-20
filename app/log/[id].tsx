@@ -35,7 +35,8 @@ export default function EditMealScreen() {
   return (
     <KeyboardAvoidingView
       style={[styles.scroll, { backgroundColor: colors.background }]}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}
