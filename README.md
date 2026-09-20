@@ -18,6 +18,7 @@ This app is for **personal logging only**. It is **not** a medical device, **not
   - Optional blood glucose (mg/dL)
   - Timestamp (defaults to now, editable)
 - Chronological history; tap a log to view, edit, or delete it
+- Favorite foods: save a name, optional carbs, and the insulin amount **you** usually enter. Picking one while logging a meal prefills the form as a personal reminder — not a dose recommendation. You can edit the insulin field before saving.
 - Local persistence with AsyncStorage (no account or backend)
 
 Later: optional insulin pump integration may be explored. v1 has no pump, CGM, or other health-device features.
@@ -89,9 +90,11 @@ app/                 Expo Router screens
   index.tsx          History + disclaimer
   log/new.tsx        Add a meal
   log/[id].tsx       View / edit / delete
+  favorites/         Favorite foods (personal reminders)
 src/
   components/        Shared UI
   context.tsx        In-memory + persisted logs
+  favorites-context.tsx
   storage.ts         AsyncStorage
   validation.ts      User-entered values only
 ```

@@ -1,4 +1,4 @@
-import type { FoodDraft, FoodItem, MealLog, MealLogDraft } from './types';
+import type { FavoriteDraft, FavoriteFood, FoodDraft, FoodItem, MealLog, MealLogDraft } from './types';
 import { createId } from './ids';
 
 export type ValidationResult =
@@ -129,6 +129,87 @@ export function validateDraft(draft: MealLogDraft): ValidationResult {
       timestamp: draft.timestamp.toISOString(),
     },
   };
+}
+
+export type FavoriteValidationResult =
+  | { ok: true; value: Omit<FavoriteFood, 'id' | 'createdAt' | 'updatedAt'> }
+  | { ok: false; message: string };
+
+export function createEmptyFavoriteDraft(): FavoriteDraft {
+  return { name: '', carbsText: '', insulinUnitsText: '' };
+}
+
+export function draftFromFavorite(favorite: FavoriteFood): FavoriteDraft {
+  return {
+    name: favorite.name,
+    carbsText: favorite.carbsGrams == null ? '' : String(favorite.carbsGrams),
+    insulinUnitsText: String(favorite.insulinUnits),
+  };
+}
+
+export function validateFavoriteDraft(draft: FavoriteDraft): FavoriteValidationResult {
+  const name = draft.name.trim();
+  if (!name) {
+    return { ok: false, message: 'Add a food or meal name for this favorite.' };
+  }
+
+  const insulin = parseRequiredNumber(draft.insulinUnitsText, 'the insulin amount you want to remember (units)');
+  if (!insulin.ok) {
+    return insulin;
+  }
+  if (insulin.value < 0) {
+    return { ok: false, message: 'Insulin units cannot be negative.' };
+  }
+  if (insulin.value > 200) {
+    return { ok: false, message: 'Insulin units look unusually high. Check the number you entered.' };
+  }
+
+  const carbs = parseOptionalNumber(draft.carbsText, 'Carbs');
+  if (!carbs.ok) {
+    return carbs;
+  }
+  if (carbs.value != null && carbs.value < 0) {
+    return { ok: false, message: 'Carbs cannot be negative.' };
+  }
+
+  return {
+    ok: true,
+    value: {
+      name,
+      carbsGrams: carbs.value,
+      insulinUnits: insulin.value,
+    },
+  };
+}
+
+export function applyFavoriteToDraft(draft: MealLogDraft, favorite: FavoriteFood): MealLogDraft {
+  return {
+    ...draft,
+    name: draft.name.trim() ? draft.name : favorite.name,
+    foods: [
+      {
+        id: createId('food'),
+        name: favorite.name,
+        carbsText: favorite.carbsGrams == null ? '' : String(favorite.carbsGrams),
+      },
+    ],
+    insulinUnitsText: String(favorite.insulinUnits),
+  };
+}
+
+export function isFavoriteFood(value: unknown): value is FavoriteFood {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+  const favorite = value as FavoriteFood;
+  return (
+    typeof favorite.id === 'string' &&
+    typeof favorite.name === 'string' &&
+    typeof favorite.insulinUnits === 'number' &&
+    Number.isFinite(favorite.insulinUnits) &&
+    typeof favorite.createdAt === 'string' &&
+    typeof favorite.updatedAt === 'string'
+  );
 }
 
 export function isMealLog(value: unknown): value is MealLog {

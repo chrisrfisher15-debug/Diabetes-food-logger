@@ -33,3 +33,19 @@ export type MealLogDraft = {
   bloodGlucoseText: string;
   timestamp: Date;
 };
+
+/** User-saved food/meal reminder. Insulin is whatever they stored — not a recommended dose. */
+export type FavoriteFood = {
+  id: string;
+  name: string;
+  carbsGrams?: number;
+  insulinUnits: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type FavoriteDraft = {
+  name: string;
+  carbsText: string;
+  insulinUnitsText: string;
+};

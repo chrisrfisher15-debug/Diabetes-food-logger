@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { combineDateAndTime, formatDateInput, formatTimeInput } from '../format';
+import { useFavorites } from '../favorites-context';
+import { combineDateAndTime, formatCarbs, formatDateInput, formatTimeInput, formatUnits } from '../format';
 import { useThemeColors } from '../theme';
 import type { MealLogDraft } from '../types';
-import { createEmptyFood, validateDraft } from '../validation';
+import { applyFavoriteToDraft, createEmptyFood, validateDraft } from '../validation';
 import { DisclaimerBanner } from './DisclaimerBanner';
 import { AppButton, ErrorText, ScreenSection, TextField } from './ui';
 
@@ -17,7 +18,9 @@ type MealFormProps = {
 
 export function MealForm({ initialDraft, submitLabel, onSubmit, onDelete }: MealFormProps) {
   const colors = useThemeColors();
+  const { favorites } = useFavorites();
   const [draft, setDraft] = useState<MealLogDraft>(initialDraft);
+  const [prefillNote, setPrefillNote] = useState<string | null>(null);
   const [dateText, setDateText] = useState(formatDateInput(initialDraft.timestamp));
   const [timeText, setTimeText] = useState(formatTimeInput(initialDraft.timestamp));
   const [error, setError] = useState<string | null>(null);
@@ -53,6 +56,34 @@ export function MealForm({ initialDraft, submitLabel, onSubmit, onDelete }: Meal
   return (
     <View style={styles.form}>
       <DisclaimerBanner colors={colors} />
+
+      {favorites.length > 0 ? (
+        <ScreenSection title="Prefill from a favorite" colors={colors}>
+          <Text style={[styles.helper, { color: colors.textMuted }]}>
+            These are personal reminders you saved. Tapping one copies name, carbs, and insulin into
+            this form. It is not a dose recommendation. Edit anything before you save.
+          </Text>
+          {favorites.map((favorite) => (
+            <AppButton
+              key={favorite.id}
+              label={`${favorite.name} · ${formatUnits(favorite.insulinUnits)}${
+                favorite.carbsGrams != null ? ` · ${formatCarbs(favorite.carbsGrams)}` : ''
+              }`}
+              variant="secondary"
+              colors={colors}
+              accessibilityHint="Copies this favorite into the form as a starting point you can edit"
+              onPress={() => {
+                setDraft((current) => applyFavoriteToDraft(current, favorite));
+                setPrefillNote(
+                  `Prefilled from “${favorite.name}”. This is your saved reminder, not a recommended dose. Change the insulin field if today’s dose is different, then save.`
+                );
+                setError(null);
+              }}
+            />
+          ))}
+          {prefillNote ? <Text style={[styles.helper, { color: colors.text }]}>{prefillNote}</Text> : null}
+        </ScreenSection>
+      ) : null}
 
       <ScreenSection title="Meal" colors={colors}>
         <TextField

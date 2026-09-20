@@ -34,6 +34,13 @@ export default function HomeScreen() {
               accessibilityHint="Opens a form to add a meal and insulin you already took"
               onPress={() => router.push('/log/new')}
             />
+            <AppButton
+              label="Favorite foods"
+              variant="secondary"
+              colors={colors}
+              accessibilityHint="Save foods and the insulin amounts you usually enter, as personal reminders only"
+              onPress={() => router.push('/favorites')}
+            />
             {error ? <ErrorText message={error} colors={colors} /> : null}
             {loading ? <ActivityIndicator size="large" color={colors.primary} /> : null}
             {!loading && logs.length > 0 ? (
