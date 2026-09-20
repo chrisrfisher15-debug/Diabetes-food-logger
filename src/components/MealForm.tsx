@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { useRouter } from 'expo-router';
+
 import { useFavorites } from '../favorites-context';
 import { combineDateAndTime, formatCarbs, formatDateInput, formatTimeInput, formatUnits } from '../format';
 import { useThemeColors } from '../theme';
@@ -18,6 +20,7 @@ type MealFormProps = {
 
 export function MealForm({ initialDraft, submitLabel, onSubmit, onDelete }: MealFormProps) {
   const colors = useThemeColors();
+  const router = useRouter();
   const { favorites } = useFavorites();
   const [draft, setDraft] = useState<MealLogDraft>(initialDraft);
   const [prefillNote, setPrefillNote] = useState<string | null>(null);
@@ -57,13 +60,22 @@ export function MealForm({ initialDraft, submitLabel, onSubmit, onDelete }: Meal
     <View style={styles.form}>
       <DisclaimerBanner colors={colors} />
 
-      {favorites.length > 0 ? (
-        <ScreenSection title="Prefill from a favorite" colors={colors}>
-          <Text style={[styles.helper, { color: colors.textMuted }]}>
-            These are personal reminders you saved. Tapping one copies name, carbs, and insulin into
-            this form. It is not a dose recommendation. Edit anything before you save.
-          </Text>
-          {favorites.map((favorite) => (
+      <ScreenSection title="Prefill from a favorite" colors={colors}>
+        <Text style={[styles.helper, { color: colors.textMuted }]}>
+          Personal reminders only. Tapping a favorite copies name, carbs, and insulin into this form
+          as a starting point. It is not a dose recommendation and is not connected to a pump or CGM.
+          Edit the insulin field before you save if today’s dose is different.
+        </Text>
+        {favorites.length === 0 ? (
+          <AppButton
+            label="Save a favorite food"
+            variant="secondary"
+            colors={colors}
+            accessibilityHint="Opens favorites so you can save a personal reminder"
+            onPress={() => router.push('/favorites/new')}
+          />
+        ) : (
+          favorites.map((favorite) => (
             <AppButton
               key={favorite.id}
               label={`${favorite.name} · ${formatUnits(favorite.insulinUnits)}${
@@ -80,10 +92,10 @@ export function MealForm({ initialDraft, submitLabel, onSubmit, onDelete }: Meal
                 setError(null);
               }}
             />
-          ))}
-          {prefillNote ? <Text style={[styles.helper, { color: colors.text }]}>{prefillNote}</Text> : null}
-        </ScreenSection>
-      ) : null}
+          ))
+        )}
+        {prefillNote ? <Text style={[styles.helper, { color: colors.text }]}>{prefillNote}</Text> : null}
+      </ScreenSection>
 
       <ScreenSection title="Meal" colors={colors}>
         <TextField
