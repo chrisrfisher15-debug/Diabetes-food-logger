@@ -25,7 +25,7 @@ Later: optional insulin pump integration may be explored. v1 has no pump, CGM, o
 
 ## Run on your phone (iPhone or Android)
 
-Same app, same steps. Expo Go is the supported way to open it on a real device.
+**Primary path:** one codebase, **Expo Go on both phones**. You do not need Xcode, Android Studio, EAS, or a custom native build.
 
 1. Install **Expo Go** on the phone
    - **iPhone:** [Expo Go on the App Store](https://apps.apple.com/app/expo-go/id982107779)
@@ -40,16 +40,18 @@ Same app, same steps. Expo Go is the supported way to open it on a real device.
    npx expo start
    ```
 
+   `npx expo start` (and `npm start`) launch in **Expo Go** mode for both platforms.
+
 3. Phone and computer on the **same Wi‑Fi**. Scan the QR code:
    - **iPhone:** open the Camera app (or Expo Go) and scan the QR code
-   - **Android:** open Expo Go and use **Scan QR code**
+   - **Android:** open Expo Go and tap **Scan QR code**
 4. If the project never loads (campus/guest Wi‑Fi, different networks, or a failed LAN connection), stop the server and start a tunnel instead. No EAS login required:
 
    ```bash
    npx expo start --tunnel
    ```
 
-   Then scan the new QR code.
+   Then scan the new QR code. This works the same on iPhone and Android.
 
 If Expo Go says the project is incompatible, this app needs the **SDK 54** Expo Go from the store. Update Expo Go, or install the SDK 54 build from [expo.dev/go](https://expo.dev/go).
 
@@ -60,7 +62,7 @@ npm install
 npx expo start
 ```
 
-Then press `w` for web, or `a` / `i` if you have an Android emulator or iOS Simulator.
+Then press `w` for web. On a computer with an emulator/simulator you can still press `a` (Android) or `i` (iOS); that still uses Expo Go, not a custom native build.
 
 ```bash
 npm run web
@@ -70,18 +72,18 @@ npm run typecheck
 
 ## Later: optional installable builds (not required)
 
-You do **not** need EAS, an Expo login, or a Play listing to use Expo Go.
+You do **not** need EAS, an Expo login, or a store listing to use Expo Go on iPhone or Android.
 
-`eas.json` profiles:
+`eas.json` is only for later binaries. It is **not** part of the Expo Go path.
 
-| Profile | What it is for |
-| --- | --- |
-| `development` | Optional custom dev client later (not Expo Go) |
-| `preview` | Internal **Android APK** you can sideload |
-| `production` | **Android App Bundle (AAB)** for Google Play |
+| Profile | Android | iOS |
+| --- | --- | --- |
+| `development` | Optional custom dev client later (not Expo Go) | Same; needs an Apple/dev-client build |
+| `preview` | Internal **APK** you can sideload | No equivalent “download an APK”. Later installable iOS needs an **Apple Developer** account and **TestFlight** |
+| `production` | **App Bundle (AAB)** for Google Play | Later App Store / TestFlight binary (Apple account required) |
 
-- **Android Play Store:** see [PLAY_STORE.md](./PLAY_STORE.md) for the Console checklist, privacy policy, and `eas build -p android --profile production`.
-- **iOS:** a later installable build needs an Apple Developer account and TestFlight. There is no Play-style APK upload.
+- **Android Play Store:** see [PLAY_STORE.md](./PLAY_STORE.md) for the Console checklist and `eas build -p android --profile production`.
+- **iOS App Store / TestFlight:** not required to try the app. Expo Go is the iPhone path today. A later IPA cannot be sideloaded like an Android APK.
 
 ## Project layout
 
