@@ -27,8 +27,12 @@ export default function NewMealScreen() {
             if (!result.ok) {
               throw new Error(result.message);
             }
-            await addLog(result.value);
+          await addLog(result.value);
+          if (router.canGoBack()) {
+            router.back();
+          } else {
             router.replace('/');
+          }
           }}
         />
       </ScrollView>

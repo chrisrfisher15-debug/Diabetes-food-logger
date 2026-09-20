@@ -49,8 +49,12 @@ export default function EditMealScreen() {
             if (!result.ok) {
               throw new Error(result.message);
             }
-            await updateLog(log.id, result.value);
+          await updateLog(log.id, result.value);
+          if (router.canGoBack()) {
+            router.back();
+          } else {
             router.replace('/');
+          }
           }}
           onDelete={() =>
             confirmDestructive({
@@ -58,8 +62,12 @@ export default function EditMealScreen() {
               message: 'This removes the meal, foods, and insulin you recorded. It cannot be undone.',
               confirmLabel: 'Delete',
               onConfirm: async () => {
-                await deleteLog(log.id);
+              await deleteLog(log.id);
+              if (router.canGoBack()) {
+                router.back();
+              } else {
                 router.replace('/');
+              }
               },
             })
           }
